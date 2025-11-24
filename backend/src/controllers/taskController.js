@@ -51,13 +51,16 @@ const createTask = async (req, res) => {
     return res.status(400).json({ message: 'Task title is required' });
   }
 
+  // Validation pour s'assurer que assignee est soit un ObjectId valide, soit null
+  const validAssignee = assignee && assignee.trim() !== '' ? assignee : null;
+
   const task = await Task.create({
     title,
     description,
     dueDate,
     priority,
     project,
-    assignee,
+    assignee: validAssignee,
     createdBy: req.user._id
   });
 
@@ -90,7 +93,11 @@ const updateTask = async (req, res) => {
   task.priority = req.body.priority ?? task.priority;
   task.dueDate = req.body.dueDate ?? task.dueDate;
   task.project = req.body.project ?? task.project;
-  task.assignee = req.body.assignee ?? task.assignee;
+
+  // Validation pour s'assurer que assignee est soit un ObjectId valide, soit null
+  if (req.body.assignee !== undefined) {
+    task.assignee = req.body.assignee && req.body.assignee.trim() !== '' ? req.body.assignee : null;
+  }
 
   const updated = await task.save();
   const populated = await updated.populate([
