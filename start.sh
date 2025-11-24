@@ -1,21 +1,18 @@
 #!/bin/bash
 
-# ========================
+# ----------------------
 # Start Backend
-# ========================
+# ----------------------
 echo "Starting backend..."
 cd backend || exit
-echo "Installing backend dependencies..."
 npm install
-echo "Starting backend..."
-npm run start &
+node index.js &    # Replace 'index.js' with your backend entry file
 
-# ========================
-# Start Frontend
-# ========================
-echo "Starting frontend..."
+# ----------------------
+# Build & Serve Frontend
+# ----------------------
+echo "Building and serving frontend..."
 cd ../frontend || exit
-echo "Installing frontend dependencies..."
 npm install
-echo "Starting frontend..."
-npm start
+npm run build
+npx serve -s build --single
