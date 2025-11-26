@@ -3,13 +3,17 @@ import { useAuth } from '../../hooks/useAuth';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
-  { to: '/tasks', label: 'Tasks' },
-  { to: '/profile', label: 'My Profile' }
+  { to: '/tasks/add', label: 'Tasks' },
+  { to: '/profile', label: 'My Profile' },
+  { to: '/users', label: 'Employees' },
+  { to: '/qr-code', label: 'QR Code' },
 ];
 
 const adminItems = [
   { to: '/users', label: 'Users' },
-  { to: '/qr-code', label: 'QR Code' }
+  { to: '/tasks/add', label: 'Add Task' },
+  { to: '/users/add', label: 'Add Employee' },
+  
 ];
 
 export const Sidebar = () => {

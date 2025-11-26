@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UserAPI } from '../services/api';
 
-export const UsersPage = () => {
+export const UsersPage = ({ addMode = false }) => {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'employee' });
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,8 @@ export const UsersPage = () => {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <section className="rounded-2xl bg-white p-6 shadow-card border border-slate-100">
+      {addMode || (
+        <section className="rounded-2xl bg-white p-6 shadow-card border border-slate-100">
         <h2 className="text-2xl font-semibold text-slate-900">Invite teammate</h2>
         <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
           <input
@@ -97,6 +98,8 @@ export const UsersPage = () => {
           </button>
         </form>
       </section>
+      )}
+      {addMode || (
       <section className="rounded-2xl bg-white p-6 shadow-card border border-slate-100">
         <h2 className="text-2xl font-semibold text-slate-900">Team directory</h2>
         <div className="mt-4 space-y-3">
@@ -124,6 +127,7 @@ export const UsersPage = () => {
           ))}
         </div>
       </section>
+      )}
     </div>
   );
 };

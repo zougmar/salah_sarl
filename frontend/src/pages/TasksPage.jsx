@@ -7,10 +7,10 @@ import { TaskTable } from '../components/shared/TaskTable';
 import { Modal } from '../components/shared/Modal';
 import { TaskForm } from '../components/shared/TaskForm';
 
-export const TasksPage = () => {
+export const TasksPage = ({ addMode = false }) => {
   const { user } = useAuth();
   const { tasks, fetchTasks, refreshMyTasks } = useTasks();
-  const [createOpen, setCreateOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(addMode);
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {

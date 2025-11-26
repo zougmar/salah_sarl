@@ -20,8 +20,10 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/tasks/add" element={<TasksPage addMode={true} />} />
           <Route path="/tasks/:id" element={<TaskDetailsPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/users/add" element={<UsersPage addMode={true} />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/qr-code" element={<QRCodePage />} />
         </Route>

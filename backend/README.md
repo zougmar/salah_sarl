@@ -1,72 +1,146 @@
-# SalahElecSarl Backend API
+# SalahElec Backend API
 
-Backend API for SalahElecSarl task & workflow platform.
+Backend API for the SalahElec task management system built with Node.js, Express, and MongoDB.
 
 ## Features
 
-- User authentication and authorization
-- Task management system
-- Role-based access control (admin, employee)
-- Project tracking
-- MongoDB database integration
+- **Authentication**: JWT-based authentication with role-based access control (Admin/Employee)
+- **Task Management**: Full CRUD operations for tasks with status tracking
+- **Comments**: Add comments to tasks
+- **User Management**: Admin can manage users (create, update, delete)
+- **Dashboard**: Statistics and analytics for admins
+- **Location Tracking**: Submit and track employee locations
 
-## Technologies Used
+## Prerequisites
 
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- bcryptjs for password hashing
+- Node.js (v14 or higher)
+- MongoDB (local or cloud instance) - See [MongoDB Setup Guide](./MONGODB_SETUP.md)
+- npm or yarn
 
 ## Installation
 
-1. Clone the repository
+1. Navigate to the backend directory:
+```bash
+cd backend
+```
+
 2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up MongoDB:
+   - **Option A (Recommended):** Use MongoDB Atlas (free cloud database)
+     - Follow the guide in [MONGODB_SETUP.md](./MONGODB_SETUP.md)
+     - Get your connection string from Atlas
+   
+   - **Option B:** Install MongoDB locally
+     - Follow the guide in [MONGODB_SETUP.md](./MONGODB_SETUP.md)
+     - Make sure MongoDB service is running
+
+4. Create a `.env` file in the backend directory:
+   - Copy `env.example` to `.env`
+   - Update the MongoDB connection string:
+   
+   **For Local MongoDB:**
+   ```env
+   MONGO_URI=mongodb://localhost:27017
+   MONGO_DB_NAME=salahelec
    ```
-   npm install
+   
+   **For MongoDB Atlas:**
+   ```env
+   MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/salahelec?retryWrites=true&w=majority
+   MONGO_DB_NAME=salahelec
    ```
-3. Create a `.env` file with the following variables:
-   ```
-   MONGODB_URI=mongodb://localhost:27017/salah_sarl
-   PORT=5000
-   NODE_ENV=development
-   JWT_SECRET=votre_cle_secrete_ici
-   JWT_EXPIRE=7d
-   CLIENT_URL=http://localhost:5173
-   ```
-4. Start the development server:
-   ```
-   npm run dev
-   ```
+   
+   - **Important:** Generate a strong JWT_SECRET (at least 32 characters)
+
+## Running the Server
+
+### Development Mode
+```bash
+npm run dev
+```
+
+### Production Mode
+```bash
+npm start
+```
+
+The server will start on `http://localhost:5000` (or the port specified in your `.env` file).
 
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/register` - Register new user
+- `GET /api/auth/me` - Get current user profile (requires auth)
 
 ### Tasks
-- `GET /api/tasks` - Get all tasks
+- `GET /api/tasks` - Get all tasks (admin) or filtered tasks
 - `GET /api/tasks/mine` - Get current user's tasks
 - `GET /api/tasks/:id` - Get task by ID
-- `POST /api/tasks` - Create new task (admin only)
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task (admin only)
+- `POST /api/tasks` - Create new task (requires auth)
+- `PUT /api/tasks/:id` - Update task (requires auth)
+- `DELETE /api/tasks/:id` - Delete task (requires admin)
 
-## Deployment
+### Comments
+- `GET /api/comments/:taskId` - Get comments for a task
+- `POST /api/comments/:taskId` - Add comment to task (requires auth)
 
-This project can be deployed on Railway. Follow these steps:
+### Users
+- `GET /api/users` - Get all users (requires admin)
+- `POST /api/users` - Create new user (requires admin)
+- `PUT /api/users/profile` - Update own profile (requires auth)
+- `PUT /api/users/:id` - Update user (requires admin)
+- `DELETE /api/users/:id` - Delete user (requires admin)
 
-1. Connect your repository to Railway
-2. Set the environment variables in Railway dashboard:
-   - `MONGODB_URI` - Your MongoDB connection string
-   - `JWT_SECRET` - Your JWT secret key
-   - `NODE_ENV` - Set to `production`
-   - `CLIENT_URL` - Your frontend URL
-3. Deploy!
+### Dashboard
+- `GET /api/dashboard` - Get dashboard statistics (requires admin)
 
-## Scripts
+### Locations
+- `POST /api/locations/submit` - Submit location (public endpoint)
+- `GET /api/locations` - Get locations (requires auth)
+- `GET /api/locations/latest/:employeeId` - Get latest location (requires auth)
 
-- `npm start` - Start production server
-- `npm run dev` - Start development server with nodemon
-- `npm run seed` - Seed the database with initial data
+## Project Structure
+
+```
+backend/
+├── controllers/     # Request handlers
+├── middleware/      # Authentication & authorization middleware
+├── models/         # MongoDB models
+├── routes/         # API routes
+├── server.js       # Express app entry point
+└── package.json    # Dependencies
+```
+
+## Security Features
+
+- Password hashing with bcryptjs
+- JWT token-based authentication
+- Role-based access control (RBAC)
+- Input validation with express-validator
+- CORS configuration
+- Password exclusion from API responses
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | 5000 |
+| `NODE_ENV` | Environment mode | development |
+| `MONGO_URI` | MongoDB connection string | mongodb://localhost:27017 |
+| `MONGO_DB_NAME` | Database name | salahelec |
+| `JWT_SECRET` | Secret key for JWT tokens | (required) |
+| `JWT_EXPIRES_IN` | JWT token expiration | 7d |
+| `CLIENT_URL` | Frontend URL for CORS | http://localhost:5173 |
+
+## Notes
+
+- All routes except `/api/auth/login`, `/api/auth/register`, and `/api/locations/submit` require authentication
+- Admin-only routes are protected with the `requireAdmin` middleware
+- Passwords are automatically hashed before saving to the database
+- JWT tokens are sent in the `Authorization` header as `Bearer <token>`
+
