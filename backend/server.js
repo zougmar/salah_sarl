@@ -23,8 +23,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
 });
 
 // API Routes
