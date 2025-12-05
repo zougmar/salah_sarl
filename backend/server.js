@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 // ----------------------
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: "https://salah-sarl-qrwf-n8a7adyk9-zougmars-projects.vercel.app/" || 'http://localhost:5173',
   credentials: true
 }));
 
